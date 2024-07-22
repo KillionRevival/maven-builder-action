@@ -31,3 +31,4 @@ runs:
       run: |
         mvn clean package
         echo "jar-path=$(find ./target -iname '*.jar')" >> $GITHUB_OUTPUT
+      shell: bash
