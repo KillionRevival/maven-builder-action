@@ -1,0 +1,33 @@
+name: "Build Maven"
+description: "Builds a maven project"
+inputs:
+  java-version:
+    default: 17
+    description: "Version of Java to build with"
+  java-distribution:
+    default: "temurin"
+    description: "Distribution of Java to use"
+outputs:
+  jar-path:
+    description: "path of the built jar file"
+    value: ${{ steps.build-step.outputs.jar-path }}
+runs:
+  using: "composite"
+  steps:
+    - name: Set up JDK ${{ inputs.java-version }}
+      uses: actions/setup-java@v2
+      with:
+        java-version: ${{ inputs.java-version }}
+        distribution: temurin
+    - name: Cache Maven packages
+      uses: actions/cache@v2
+      with:
+        path: ~/.m2/repository
+        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+          ${{ runner.os }}-maven-
+    - name: Build with Maven
+      id: build-step
+      run: |
+        mvn clean package
+        echo "jar-path=$(find ./target -iname '*.jar')" >> $GITHUB_OUTPUT
