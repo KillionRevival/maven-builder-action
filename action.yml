@@ -7,6 +7,9 @@ inputs:
   java-distribution:
     default: "temurin"
     description: "Distribution of Java to use"
+  token:
+    required: true
+    description: "PAT to use to authenticate with github"
 outputs:
   jar-path:
     description: "path of the built jar file"
@@ -19,6 +22,12 @@ runs:
       with:
         java-version: ${{ inputs.java-version }}
         distribution: temurin
+
+    - name: Configure Maven settings
+      run: |
+        mkdir -p ~/.m2
+        echo "<settings><servers><server><id>github</id><username>${{ github.actor }}</username><password>${{ inputs.token }}</password></server></servers></settings>" > ~/.m2/settings.xml
+
     - name: Build with Maven
       id: build-step
       run: |
