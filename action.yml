@@ -27,6 +27,7 @@ runs:
       run: |
         mkdir -p ~/.m2
         echo "<settings><servers><server><id>github</id><username>${{ github.actor }}</username><password>${{ inputs.token }}</password></server></servers></settings>" > ~/.m2/settings.xml
+      shell: bash
 
     - name: Build with Maven
       id: build-step
