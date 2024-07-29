@@ -33,5 +33,5 @@ runs:
       id: build-step
       run: |
         mvn clean package
-        echo "jar-path=$(find ./target -iname '*.jar')" >> $GITHUB_OUTPUT
+        echo "jar-path=$(find ./target -iname '*.jar' ! -iname '*-dev*' ! -iname 'original-*')" >> $GITHUB_OUTPUT
       shell: bash
